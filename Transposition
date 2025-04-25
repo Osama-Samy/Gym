@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+// Encryption function using Transposition Cipher
+string encrypt(string text, int key) {
+    string result = "";
+
+    // Start from each position according to the key, and jump every 'key' characters
+    for (int i = 0; i < key; i++) {
+        for (int j = i; j < text.length(); j += key) {
+            result += text[j];
+        }
+    }
+
+    return result;
+}
+
+// Decryption function
+string decrypt(string cipher, int key) {
+    int len = cipher.length();
+    int cols = (len + key - 1) / key; // Number of columns
+    int fullCols = len % key;         // Number of columns that are fully filled
+    string result(len, ' ');          // Reserve space for the original text
+
+    int index = 0;
+    for (int i = 0; i < key; i++) {
+        int step = (i < fullCols) ? cols : cols - 1;
+
+        for (int j = 0; j < step; j++) {
+            result[j * key + i] = cipher[index++];
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    string message;
+    int key;
+    char choice;
+
+    // Ask the user for the operation they want to perform (Encryption or Decryption)
+    cout << "Choose operation (E for encryption / D for decryption): ";
+    cin >> choice;
+    cin.ignore(); // To clear the newline character from the input buffer
+
+    cout << "Enter the message: ";
+    getline(cin, message);
+
+    cout << "Enter the key (number): ";
+    cin >> key;
+
+    if (choice == 'E' || choice == 'e') {
+        // Encrypt the message
+        string encrypted = encrypt(message, key);
+        cout << "\nEncrypted text: " << encrypted << endl;
+    } else if (choice == 'D' || choice == 'd') {
+        // Decrypt the message
+        string decrypted = decrypt(message, key);
+        cout << "\nDecrypted text: " << decrypted << endl;
+    } else {
+        cout << "Invalid option!" << endl;
+    }
+
+    return 0;
+}
