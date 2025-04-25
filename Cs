@@ -1,0 +1,64 @@
+#include <iostream>
+using namespace std;
+
+// Encryption function
+string encrypt(string text, int shift) {
+    string result = "";
+
+    for (int i = 0; i < text.length(); i++) {
+        char c = text[i];
+
+        if (isupper(c)) {
+            result += char((c - 'A' + shift + 26) % 26 + 'A');
+        } else if (islower(c)) {
+            result += char((c - 'a' + shift + 26) % 26 + 'a');
+        } else {
+            result += c; // Leave symbols and spaces as they are
+        }
+    }
+
+    return result;
+}
+
+// Decryption function
+string decrypt(string text, int shift) {
+    return encrypt(text, -shift); // Reverse the shift to decrypt
+}
+
+int main() {
+    string message;
+    int shift;
+    char choice;
+    char direction;
+
+    cout << "Choose operation (E for encryption / D for decryption): ";
+    cin >> choice;
+    cin.ignore(); // To clear the newline character from the input buffer
+
+    cout << "Enter the message: ";
+    getline(cin, message);
+
+    cout << "Choose direction (R for right / L for left): ";
+    cin >> direction;
+
+    cout << "Enter shift value: ";
+    cin >> shift;
+
+    // Adjust shift based on direction
+    if (direction == 'L' || direction == 'l') {
+        shift = -shift;
+    }
+
+    // Check what the user wants to do
+    if (choice == 'E' || choice == 'e') {
+        string encrypted = encrypt(message, shift);
+        cout << "\nEncrypted text: " << encrypted << endl;
+    } else if (choice == 'D' || choice == 'd') {
+        string decrypted = decrypt(message, shift);
+        cout << "\nDecrypted text: " << decrypted << endl;
+    } else {
+        cout << "Invalid option!" << endl;
+    }
+
+    return 0;
+}
